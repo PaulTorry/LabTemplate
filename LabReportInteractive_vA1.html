@@ -1,0 +1,86 @@
+<html><head>
+<style>
+.left {    float: left;}
+.w50 {    width: 50%;    height: 80%;    overflow-y: scroll;}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+$(()=>{
+  $('[ptype]').css('color', 'red').text("hi")
+//  $('[pInOut="in"]').change((e)=>{$('[' + $(this).attr('pname') + ']').text($(this).text())  })
+//  $('[pInOut="in"]').on('input', (e)=>{$(`[pname=  ${$(e.target).attr("pname")} ]`).filter('[pInOut="out"]').css('color', 'blue'); });
+$('[pInOut="in"]').on('input',
+ (e)=>{
+   $(`[pname=  ${$(e.target).attr("pname")} ][ pInOut="out"]`)
+   .text($(e.target).val()) ;
+   $(`[pname=  ${$(e.target).attr("pname")} ][ pInOut="out"]`)
+   .prop('src',$(e.target).val()) ;
+ });
+
+function getSaveObj(){
+ return $.makeArray($('[pInOut="in"]')).reduce((a,b)=>{
+    a[$(b).attr("pname")] = $(b).val();
+    return a;
+ },{})
+}
+
+function loadFromObj(saveObj){
+  Object.keys(saveObj).forEach((key)=>{
+     console.log("blah" + saveObj[key]);
+
+  })
+
+}
+
+loadFromObj(getSaveObj());
+
+//console.log(getActiveObjects());/
+//console.log($('[pInOut="in"]'))
+})
+</script>
+
+
+</head>
+<body>
+
+  <button class="save" onclick="save()">Save</button>
+  <button class="load" onclick="load()">Load</button>
+  <input text class="savename">
+  <a id="downloadJSON"></a>
+<div id='content'>
+<div id="in" class="left w50">
+  <h1 onclick="console.log(document.body.innerHTML)">How to write a simple lab report</h1>
+
+<h2>Step 0: What's your name? </h2> (:name)
+
+  <h2>Step 1: Identify Variables</h2>
+  <p>Think about ALL the variables that can affect the system.</p>
+  <p>Choose your INDEPENDENT VARIABLE:
+  <input type='text' pInOut= 'in' ptype='shortAns' pname='IV'>
+  </p>
+  <p>List your CONTROLLED VARIABLES:<br>
+  <textarea ptype='paraAns' pInOut= 'in' pname='CV'></textarea>
+ <p>  pic link</p>
+<textarea ptype='pic' pInOut= 'in' pname='dia'></textarea>
+  <input type='file' ptype='pic'  ptype='pic' pInOut= 'in' pname='dia2'>
+<h2>Step 2: Title and Research Question</h2>
+  <p>Choose a title:<br>
+    (;title)</p>
+  <p>The Research Question should talk about the variables. It has been written for you </p>
+  <p>To achieve a good level you should describe the problem in more detail:<br>
+  (;problemdescription)</p>
+  </div>
+
+<div id="out" class="right w50">
+  <p>The IV is <span pInOut='out' ptype='shortAns' pname='IV'></span></p>
+  <p>The controled variables are:</p> <p pInOut='out' ptype='shortAns' pname='CV'></p>
+  <p pInOut='out' ptype='shortAns' pname='CV'></p>
+  <p pInOut='out' ptype='shortAns' pname='CV'></p>
+  <img ptype='pic' pInOut= 'out' pname='dia'>
+    <img ptype='pic' pInOut= 'out' pname='dia2'>
+</div>
+</div>
+  </body>
+</html>
