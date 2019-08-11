@@ -18,6 +18,7 @@ $('[pInOut="in"]').on('input',
    $(`[pname=  ${$(e.target).attr("pname")} ][ pInOut="out"]`)
    .prop('src',$(e.target).val()) ;
  });
+ $('#save').click(save);  $('#load').click(load);
 
 function getSaveObj(){
  return $.makeArray($('[pInOut="in"]')).reduce((a,b)=>{
@@ -26,15 +27,22 @@ function getSaveObj(){
  },{})
 }
 
-function loadFromObj(saveObj){
-  Object.keys(saveObj).forEach((key)=>{
-     console.log("blah" + saveObj[key]);
-
-  })
-
+function save(){
+  localStorage.setItem($('#savename').val() || 'Anon', JSON.stringify(getSaveObj()));
+  console.log(localStorage.getItem($('#savename').val()));
 }
 
-loadFromObj(getSaveObj());
+function load(){
+  loadFromObj(JSON.parse(localStorage.getItem($('#savename').val() || 'Anon')));
+}
+
+function loadFromObj(saveObj){
+  Object.keys(saveObj).forEach((key)=>{
+     $(`[pname= ${key}]`).val(saveObj[key]).trigger('input');
+  })
+}
+
+loadFromObj({'CV':'you', 'IV':'time'});
 
 //console.log(getActiveObjects());/
 //console.log($('[pInOut="in"]'))
@@ -45,9 +53,9 @@ loadFromObj(getSaveObj());
 </head>
 <body>
 
-  <button class="save" onclick="save()">Save</button>
-  <button class="load" onclick="load()">Load</button>
-  <input text class="savename">
+  <button id="save">Save</button>
+  <button id="load">Load</button>
+  <input text id="savename">
   <a id="downloadJSON"></a>
 <div id='content'>
 <div id="in" class="left w50">
